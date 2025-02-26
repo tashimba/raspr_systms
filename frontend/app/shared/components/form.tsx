@@ -23,14 +23,44 @@ export default function Form({
   setPassword,
   setNumber,
 }: Props) {
-  // const validateNumber = (value: string) => {
-  //   const regExp = /^\+?7?9?(0[0-9]{9})$/;
-  //   if (!regExp.test(value)) {
-  //     setNumberError("Номер телефона должен быть в формате +380501234567");
-  //   } else {
-  //     setNumberError("");
-  //   }
-  // };
+  const [isFieldsFill, setIsFieldsFill] = React.useState(true);
+  const [errorNumber, setErrorNumber] = React.useState(false);
+
+  const validateNumber = (value: string) => {
+    const regExp = /^(?:\+7|8)9\d{9}$/;
+    if (!regExp.test(value)) {
+      setErrorNumber(true);
+      return false;
+    } else {
+      setErrorNumber(false);
+      return true;
+    }
+  };
+
+  const cancelError = () => {
+    setErrorNumber(false);
+    setIsFieldsFill(true);
+  };
+
+  const checkInputs = () => {
+    if (isLogin) {
+      setIsFieldsFill(name.length > 0 && password.length > 0);
+    } else {
+      setIsFieldsFill(
+        name.length > 0 && password.length > 0 && number.length > 0
+      );
+    }
+  };
+  const handleClick = () => {
+    checkInputs();
+    if (!isLogin) {
+      validateNumber(number);
+    }
+    if (isFieldsFill === true) {
+      console.log(isFieldsFill);
+      onSubmit();
+    }
+  };
 
   return (
     <div className="flex gap-5 h-36 flex-col">
@@ -39,29 +69,45 @@ export default function Form({
           type="text"
           placeholder="Имя"
           value={name}
-          changeValue={setName}
+          changeValue={(value) => {
+            cancelError();
+            setName(value);
+          }}
         />
         <Input
           type="password"
           placeholder="Пароль"
           value={password}
-          changeValue={setPassword}
+          changeValue={(value) => {
+            cancelError();
+            setPassword(value);
+          }}
         />
         {!isLogin && (
-          <Input
-            type="text"
-            placeholder="Номер телефона"
-            value={number}
-            changeValue={(value) => {
-              setNumber(value);
-            }}
-            // error={numberError}
-          />
+          <>
+            <Input
+              type="text"
+              placeholder="Номер телефона"
+              value={number}
+              changeValue={(value) => {
+                cancelError();
+                setNumber(value);
+              }}
+            />
+          </>
         )}
+        <div className="min-h-[16px] flex items-center justify-center">
+          {!isFieldsFill && (
+            <p className="text-red-500 text-xs">Все поля обязательны</p>
+          )}
+          {isFieldsFill && errorNumber && (
+            <p className="text-red-500 text-xs">Неверный формат номера</p>
+          )}
+        </div>
       </div>
       <div className="flex flex-col gap-5 w-64 justify-center">
         <button
-          onClick={onSubmit}
+          onClick={handleClick}
           className={`w-full p-2 border rounded-md bg-blue-500 hover:bg-blue-700 duration-100 text-white `}
         >
           {isLogin ? "Войти" : "Зарегистрироваться"}

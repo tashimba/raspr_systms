@@ -9,34 +9,42 @@ export default function PageRegistration() {
   const [name, setName] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [number, setNumber] = React.useState("");
+  const [error, setError] = React.useState(false);
+
+  const handleSetNumber = (value: string) => {
+    setError(false);
+    setNumber(value);
+  };
 
   const validateNumber = (value: string) => {
-    const regExp = /^\+?7?9?([0-9]{9})$/;
+    const regExp = /^(?:\+7|8)9\d{9}$/;
     if (!regExp.test(value)) {
+      setError(true);
       return false;
     } else {
+      setError(false);
       return true;
     }
   };
 
   const onSubmit = () => {
+    if (name.length === 0 || password.length === 0) return;
+
     if (validateNumber(number)) {
       api.register(name, password, number);
       router.push("/main");
-    } else {
-      alert("Неверный формат номера");
     }
   };
 
   return (
-    <div className="flex w-full h-[100vh] items-center justify-center">
+    <div className="flex w-full h-[100vh] flex-col items-center justify-center">
       <Form
         name={name}
         password={password}
         number={number}
         setName={setName}
         setPassword={setPassword}
-        setNumber={setNumber}
+        setNumber={handleSetNumber}
         onSubmit={onSubmit}
         isLogin={false}
       />

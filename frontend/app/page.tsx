@@ -11,6 +11,7 @@ export default function PageLogin() {
   const [number, setNumber] = React.useState("");
 
   const onSubmit = async () => {
+    if (name.length === 0 || password.length === 0) return;
     try {
       await api.login(name, password);
       router.push("/main");
