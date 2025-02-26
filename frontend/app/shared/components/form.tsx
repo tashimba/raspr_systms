@@ -23,6 +23,15 @@ export default function Form({
   setPassword,
   setNumber,
 }: Props) {
+  // const validateNumber = (value: string) => {
+  //   const regExp = /^\+?7?9?(0[0-9]{9})$/;
+  //   if (!regExp.test(value)) {
+  //     setNumberError("Номер телефона должен быть в формате +380501234567");
+  //   } else {
+  //     setNumberError("");
+  //   }
+  // };
+
   return (
     <div className="flex gap-5 h-36 flex-col">
       <div className="flex flex-col gap-2 w-64 justify-between">
@@ -43,14 +52,17 @@ export default function Form({
             type="text"
             placeholder="Номер телефона"
             value={number}
-            changeValue={setNumber}
+            changeValue={(value) => {
+              setNumber(value);
+            }}
+            // error={numberError}
           />
         )}
       </div>
       <div className="flex flex-col gap-5 w-64 justify-center">
         <button
           onClick={onSubmit}
-          className="w-full p-2 border rounded-md bg-blue-500 hover:bg-blue-700 duration-100 text-white"
+          className={`w-full p-2 border rounded-md bg-blue-500 hover:bg-blue-700 duration-100 text-white `}
         >
           {isLogin ? "Войти" : "Зарегистрироваться"}
         </button>
@@ -67,7 +79,7 @@ export default function Form({
           <p className="text-center text-sm ">
             Уже есть аккаунт?{" "}
             <span>
-              <Link className="text-blue-500" href="/login">
+              <Link className="text-blue-500" href="/">
                 Вход
               </Link>
             </span>

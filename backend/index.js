@@ -41,7 +41,7 @@ app.post("/login", (req, res) => {
 
 app.post("/register", (req, res) => {
   const { name, password, number } = req.body;
-
+  console.log(name, password, number);
   if (!name || !password || !number) {
     return res.status(400).json({ message: "All fields are required" });
   }
@@ -50,7 +50,7 @@ app.post("/register", (req, res) => {
   db.query(sql, [name, password, number], (error) => {
     if (error)
       return res
-        .status(500)
+        .status(555)
         .json({ message: "Error registering user" + error });
     res.status(201).json({ message: "User registered successfully" });
   });

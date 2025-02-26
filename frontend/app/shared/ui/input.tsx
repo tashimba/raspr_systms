@@ -1,3 +1,4 @@
+import { error } from "console";
 import React from "react";
 
 type Props = {
